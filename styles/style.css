@@ -1,0 +1,347 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Темы */
+
+:root {
+    --primary-color: #fff;
+    --secondary-color: #000;
+}
+
+.dark-theme {
+    --primary-color: #000;
+    --secondary-color: #fff;
+}
+
+/* main */
+
+main {
+    justify-content: center;
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--primary-color);
+}
+/* Блок контента */
+
+section {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 100vh;
+}
+
+.main-section {
+    flex-direction: row;
+}
+
+.hide-object {
+    display: none !important;
+}
+
+.information-text {
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    font-weight: 400;
+    text-decoration: none;
+    width: 100%;
+    font-size: 24px;
+    color: var(--secondary-color);
+    padding-top: 2vh;
+}
+
+.header-text {
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    font-weight: 600;
+    width: 100%;
+    font-size: 36px;
+    color: var(--secondary-color);
+}
+
+.school-logo {
+    padding-top: 3%;
+    width: 20vw;
+    height: 20vw;
+}
+
+.img-block {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+
+.author-photo {
+    position: relative;
+    overflow: hidden;
+    width: 50vh;
+    bottom: 0;
+}
+
+.author-name {
+    font-family: Roboto, sans-serif;
+    position: center;
+    text-align: center;
+    font-weight: 700;
+    text-decoration: none;
+    width: 100%;
+    font-size: 6vw;
+    color: var(--secondary-color);
+}
+
+/* навигация */
+
+.navigation-bar {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    align-items: center;
+}
+
+
+.nav-elem {
+    font-family: Roboto, sans-serif;
+    text-align: center;
+    align-items: center;
+    font-weight: 300;
+    margin-top: 10%;
+    font-size: 30px;
+    color: #808080;
+    cursor: pointer;
+    list-style-type: none;
+    text-decoration: none;
+}
+
+.nav-elem:hover {
+    color: #505050;
+}
+
+.active-nav-elem {
+    color: var(--secondary-color);
+}
+
+.theme-button {
+    justify-content: center;
+    border: none;
+    background-color: var(--secondary-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+.theme-button svg {
+    padding-top: 3px;
+    height: 40px;
+}
+
+/* анимации */
+
+section {
+    animation-duration: 1s;
+    animation-name: appearance-of-content;
+}
+
+.burger-button {
+    display: none;
+    animation-duration: 1s;
+}
+
+header {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    background-color: var(--primary-color);
+    z-index: 1;
+}
+
+@keyframes open-nav-elem {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 100%;
+    }
+}
+
+@keyframes open-header {
+    from {
+        height: 50px;
+    }
+
+    to {
+        height: 100vh;
+    }
+}
+
+@keyframes close-nav-elem {
+    from {
+        opacity: 100%;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes close-header {
+    from {
+        height: 100vh;
+    }
+
+    to {
+        height: 50px;
+    }
+}
+
+@keyframes appearance-of-content {
+    from {
+        opacity: 0;
+        margin-top: 5%;
+        width: 60%;
+    }
+
+    to {
+        opacity: 100%;
+        margin-top: 0;
+        width: 60%;
+    }
+}
+
+/* адаптация для мобильных устройств */
+
+@media (max-width: 768px) {
+    section {
+        width: 90%;
+    }
+
+    .open-header {
+        animation-direction: alternate;
+        animation-duration: 1s;
+        animation-name: open-header;
+        animation-fill-mode: forwards;
+    }
+
+    .open-nav-elem {
+        display: flex !important;
+        animation-delay: 0.5s;
+        animation-direction: alternate;
+        animation-duration: 1s;
+        animation-name: open-nav-elem;
+        animation-fill-mode: forwards;
+    }
+
+    .close-header {
+        animation-duration: 1s;
+        animation-name: close-header;
+        animation-fill-mode: forwards;
+    }
+
+    .close-nav-elem {
+        display: flex !important;
+        animation-duration: 1s;
+        animation-name: close-nav-elem;
+        animation-fill-mode: forwards;
+    }
+
+    .burger-button {
+        display: block;
+        position: absolute;
+        width: 30px;
+        height: 20px;
+        top: 10px;
+        left: 10px;
+    }
+
+    .burger-button span {
+        position: absolute;
+        background-color: var(--secondary-color);
+        left: 0;
+        width: 100%;
+        height: 2px;
+        top: 9px;
+    }
+
+    .burger-button:before,
+    .burger-button:after {
+        content: '';
+        background-color: var(--secondary-color);
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        left: 0;
+    }
+
+    .burger_button:before {
+        top: 0;
+    }
+
+    .burger_button:after {
+        bottom: 0;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    .img {
+        width: 60vw;
+        height: 60vw;
+    }
+
+    .school-logo {
+        width: 30vh;
+        height: 30vh;
+    }
+
+    .button {
+        display: none;
+    }
+
+    /*  navigation  */
+    header {
+        display: block;
+        overflow: hidden;
+    }
+
+    .navigation-bar {
+        display: none;
+        position: absolute;
+        top: 10vh;
+        z-index: 2;
+        opacity: 0;
+    }
+
+    .nav-elem {
+        font-size: 36px;
+    }
+
+    .theme-button {
+        width: 70px;
+        height: 70px;
+        margin-top: 5vh;
+    }
+
+    .theme-button svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 1700px) {
+    .author-name {
+        display: none;
+    }
+}
