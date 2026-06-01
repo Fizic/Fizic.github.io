@@ -4,9 +4,25 @@ import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-const VIRTUAL_WORKS_MODULE_ID = 'virtual:works-catalog';
-const RESOLVED_VIRTUAL_WORKS_MODULE_ID = `\0${VIRTUAL_WORKS_MODULE_ID}`;
 const worksRoot = path.resolve(__dirname, 'src/content/works');
+const featuredWorksRoot = path.resolve(__dirname, 'src/content/featured-works');
+const catalogs = [
+  {
+    virtualModuleId: 'virtual:works-catalog',
+    exportName: 'workFiles',
+    root: worksRoot,
+    sourcePrefix: '/src/content/works',
+  },
+  {
+    virtualModuleId: 'virtual:featured-works-catalog',
+    exportName: 'featuredWorkFiles',
+    root: featuredWorksRoot,
+    sourcePrefix: '/src/content/featured-works',
+  },
+].map((catalog) => ({
+  ...catalog,
+  resolvedVirtualModuleId: `\0${catalog.virtualModuleId}`,
+}));
 const skippedDirectories = new Set(['node_modules', '.git', 'dist', 'build', 'coverage']);
 const allowedExtensions = new Set([
   'pdf',
@@ -34,6 +50,7 @@ const allowedExtensions = new Set([
   'mkv',
   'webm',
   'exe',
+  'mp3',
   'json',
   'yml',
   'yaml',
@@ -46,6 +63,17 @@ const allowedExtensions = new Set([
   'asm',
   'pas',
   'lex',
+  'py',
+  'hs',
+  'c',
+  'cpp',
+  'html',
+  'word',
+  'rsf',
+  'sample',
+  'veg',
+  'fnt',
+  'sfn',
   'mw',
 ]);
 const allowedFileNames = new Set(['Dockerfile', 'Makefile', 'README', 'LICENSE']);
@@ -92,42 +120,50 @@ function readWorksFiles(directory) {
   return items;
 }
 
+function buildCatalogModule({ exportName, root, sourcePrefix }) {
+  if (!fs.existsSync(root)) {
+    return `export const ${exportName} = [];`;
+  }
+
+  const files = readWorksFiles(root).sort((a, b) =>
+    a.localeCompare(b, 'ru', { numeric: true, sensitivity: 'base' }),
+  );
+
+  const imports = [];
+  const entries = [];
+
+  files.forEach((filePath, index) => {
+    const importName = `${exportName}${index}`;
+    const relativePath = path.relative(root, filePath).split(path.sep).join('/');
+    const sourcePath = `${sourcePrefix}/${relativePath}`;
+
+    imports.push(`import ${importName} from ${JSON.stringify(`${sourcePath}?url`)};`);
+    entries.push(`{ cleanPath: ${JSON.stringify(relativePath)}, url: ${importName} }`);
+  });
+
+  return `${imports.join('\n')}\n\nexport const ${exportName} = [\n  ${entries.join(',\n  ')}\n];`;
+}
+
 function worksCatalogPlugin() {
   return {
     name: 'works-catalog-plugin',
     resolveId(id) {
-      if (id === VIRTUAL_WORKS_MODULE_ID) {
-        return RESOLVED_VIRTUAL_WORKS_MODULE_ID;
+      const catalog = catalogs.find((entry) => entry.virtualModuleId === id);
+
+      if (catalog) {
+        return catalog.resolvedVirtualModuleId;
       }
 
       return null;
     },
     load(id) {
-      if (id !== RESOLVED_VIRTUAL_WORKS_MODULE_ID) {
+      const catalog = catalogs.find((entry) => entry.resolvedVirtualModuleId === id);
+
+      if (!catalog) {
         return null;
       }
 
-      if (!fs.existsSync(worksRoot)) {
-        return 'export const workFiles = [];';
-      }
-
-      const files = readWorksFiles(worksRoot).sort((a, b) =>
-        a.localeCompare(b, 'ru', { numeric: true, sensitivity: 'base' }),
-      );
-
-      const imports = [];
-      const entries = [];
-
-      files.forEach((filePath, index) => {
-        const importName = `workFile${index}`;
-        const relativePath = path.relative(worksRoot, filePath).split(path.sep).join('/');
-        const sourcePath = `/src/content/works/${relativePath}`;
-
-        imports.push(`import ${importName} from ${JSON.stringify(`${sourcePath}?url`)};`);
-        entries.push(`{ cleanPath: ${JSON.stringify(relativePath)}, url: ${importName} }`);
-      });
-
-      return `${imports.join('\n')}\n\nexport const workFiles = [\n  ${entries.join(',\n  ')}\n];`;
+      return buildCatalogModule(catalog);
     },
   };
 }

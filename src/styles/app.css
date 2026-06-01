@@ -281,6 +281,7 @@
 .metric-card,
 .about-note,
 .feature-card,
+.featured-work-card,
 .preview-panel,
 .semester-card,
 .subject-card,
@@ -397,15 +398,45 @@
   font-weight: 300;
 }
 
+#about {
+  padding: 72px 0;
+}
+
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
-  gap: 32px;
+  align-items: start;
+  gap: 24px;
+}
+
+.about-content {
+  display: grid;
+  gap: 28px;
+}
+
+.about-heading {
+  margin-bottom: 0;
 }
 
 .about-copy {
   display: grid;
-  gap: 20px;
+  gap: 14px;
+}
+
+.about-photo-frame {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: start;
+  padding: 0;
+}
+
+.about-photo {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
 }
 
 .about-copy p,
@@ -449,6 +480,51 @@
 .feature-card {
   padding: 32px;
   background: rgba(255, 255, 255, 0.74);
+}
+
+.featured-works-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.featured-work-card {
+  display: grid;
+  align-content: space-between;
+  gap: 24px;
+  padding: 32px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(246, 243, 240, 0.98));
+  box-shadow: var(--shadow-md);
+}
+
+.featured-work-card__content {
+  display: grid;
+  gap: 14px;
+}
+
+.featured-work-card__content h3 {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 300;
+}
+
+.featured-work-card__content p {
+  margin: 0;
+}
+
+.featured-work-card__context {
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.featured-work-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .feature-card__icon {
@@ -823,6 +899,7 @@
 
   .card-grid,
   .subject-grid,
+  .featured-works-grid,
   .metrics-grid {
     grid-template-columns: 1fr;
   }
@@ -869,6 +946,7 @@
 
   .hero__actions,
   .preview-panel__actions,
+  .featured-work-card__footer,
   .work-list__item,
   .semester-card__header,
   .subject-card__header,
